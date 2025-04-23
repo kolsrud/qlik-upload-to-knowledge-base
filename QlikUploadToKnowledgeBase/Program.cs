@@ -11,7 +11,8 @@ namespace QlikUploadToKnowledgeBase
             var conf = JObject.FromObject(new
             {
                 url = "",
-                apiKey = ""
+                apiKey = "",
+                kbName = ""
             });
 
             const string answersUploadConfFile = "answersUploadConf.json";
@@ -26,6 +27,7 @@ namespace QlikUploadToKnowledgeBase
 
             var url = conf["url"].Value<string>();
             var apiKey = conf["apiKey"].Value<string>();
+            var kbName = conf["kbName"].Value<string>();
 
             var client = new RestClientQcs(url);
             client.AsApiKey(apiKey);
@@ -34,7 +36,7 @@ namespace QlikUploadToKnowledgeBase
             var files = args;
 
             UploadFiles(client, folder, files);
-            UpdateKnowledgeBase(client, "MyBase", files.Select(Path.GetFileName));
+            UpdateKnowledgeBase(client, kbName, files.Select(Path.GetFileName));
         }
 
         private static void UpdateKnowledgeBase(RestClientQcs client, string kbName, IEnumerable<string?> fileNames)
